@@ -7,6 +7,17 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-10 col-xl-12">
+
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <!-- Header Section -->
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
                     <h1 class="mb-3 mb-md-0">Create New License</h1>
@@ -79,84 +90,86 @@
                                         <div class="col-4 pt-3">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="lifetimeCheckbox"
-                                                    name="lifetime" {{ old('lifetime') ? 'checked' : '' }}>
+                                                    name="is_lifetime" value="1"
+                                                    {{ old('is_lifetime') ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="lifetimeCheckbox">
                                                     Lifetime
                                                 </label>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Domain Configuration -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-4">
-                                <i class="fas fa-globe me-2 text-primary"></i>
-                                <h3 class="h5 mb-0">Domain Configuration</h3>
-                            </div>
-
-                            <div class="row g-4">
-                                <div class="col-md-8">
-                                    <label for="domain" class="form-label">Primary Domain</label>
-                                    <input type="url"
-                                        class="form-control {{ $errors->has('domain') ? 'is-invalid' : '' }}" id="domain"
-                                        name="domain" placeholder="https://example.com" value="{{ old('domain') }}"
-                                        required>
-                                    <div class="invalid-feedback">Please enter a valid domain URL</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="maxDomains" class="form-label">Max Domains</label>
-                                    <input type="number"
-                                        class="form-control {{ $errors->has('max_domains') ? 'is-invalid' : '' }}"
-                                        id="maxDomains" name="max_domains" value="{{ old('max_domains', 1) }}"
-                                        min="1" step="1" required>
-                                    <div class="invalid-feedback">Minimum 1 domain required</div>
-                                </div>
-
-                                <div class="col-12">
-                                    <label for="ipRestrictions" class="form-label">IP Restrictions</label>
-                                    <textarea class="form-control font-monospace {{ $errors->has('ip_restrictions') ? 'is-invalid' : '' }}"
-                                        id="ipRestrictions" name="ip_restrictions" rows="3" placeholder="192.168.1.1&#10;10.0.0.1">{{ old('ip_restrictions') }}</textarea>
-                                    <div class="form-text">One IP per line, empty for no restrictions</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Additional Information -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-4">
-                                <i class="fas fa-sticky-note me-2 text-primary"></i>
-                                <h3 class="h5 mb-0">Additional Information</h3>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="4"
-                                    placeholder="License-specific notes...">{{ old('notes') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="d-flex flex-column-reverse flex-md-row justify-content-between align-items-center py-4">
-                        <div class="d-flex gap-2">
-                            <button type="reset" class="btn btn-outline-secondary">
-                                <i class="fas fa-xmark me-2"></i>Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary px-4">
-                                <i class="fas fa-save me-2"></i>Save License
-                            </button>
-                        </div>
-                    </div>
-                </form>
             </div>
+
+            <!-- Domain Configuration -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-globe me-2 text-primary"></i>
+                        <h3 class="h5 mb-0">Domain Configuration</h3>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <label for="domain" class="form-label">Primary Domain</label>
+                            <input type="url" class="form-control {{ $errors->has('domain') ? 'is-invalid' : '' }}"
+                                id="domain" name="domain" placeholder="https://example.com" value="{{ old('domain') }}"
+                                required>
+                            <div class="invalid-feedback">Please enter a valid domain URL</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="maxDomains" class="form-label">Max Domains</label>
+                            <input type="number"
+                                class="form-control {{ $errors->has('max_domains') ? 'is-invalid' : '' }}" id="maxDomains"
+                                name="max_domains" value="{{ old('max_domains', 1) }}" min="1" step="1"
+                                required>
+                            <div class="invalid-feedback">Minimum 1 domain required</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="ipRestrictions" class="form-label">IP Restrictions</label>
+                            <textarea class="form-control font-monospace {{ $errors->has('ip_restrictions') ? 'is-invalid' : '' }}"
+                                id="ipRestrictions" name="ip_restrictions" rows="3" placeholder="192.168.1.1&#10;10.0.0.1">{{ old('ip_restrictions') }}</textarea>
+                            <div class="form-text">One IP per line, empty for no restrictions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>
+                        <h3 class="h5 mb-0">Additional Information</h3>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="meta_data" rows="4"
+                            placeholder="License-specific notes...">{{ old('notes') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex flex-column-reverse flex-md-row justify-content-between align-items-center py-4">
+                <div class="d-flex gap-2">
+                    <button type="reset" class="btn btn-outline-secondary">
+                        <i class="fas fa-xmark me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-2"></i>Save License
+                    </button>
+                </div>
+            </div>
+            </form>
         </div>
+    </div>
     </div>
 
     <style>

@@ -61,11 +61,14 @@
                 <table class="table table-hover table-striped mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>License Key</th>
+                            {{-- <th>License Key</th> --}}
                             <th>Status</th>
                             <th>Domain</th>
                             <th>Expires At</th>
                             <th>Last Check</th>
+                            <th>
+                                Check Status
+                            </th>
                             <th>Usage</th>
                             <th>Actions</th>
                         </tr>
@@ -73,7 +76,7 @@
                     <tbody>
                         @forelse ($licenses as $license)
                             <tr>
-                                <td class="font-monospace">{{ $license->license_key }}</td>
+                                {{-- <td class="font-monospace">{{ $license->license_key }}</td> --}}
                                 <td>
                                     @php
                                         $statusClasses = [
@@ -101,6 +104,12 @@
                                     @else
                                         <span class="text-muted">Lifetime</span>
                                     @endif
+                                </td>
+                                <td>
+                                    {{-- api check for project a,project b... --}}
+                                    <button class="btn btn-sm btn-link check-status-btn" data-id="{{ $license->id }}">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
                                 </td>
                                 <td>{{ $license->updated_at->diffForHumans() }}</td>
                                 <td>{{ $license->used_domains ?? 0 }}/{{ $license->max_domains }}</td>
@@ -157,4 +166,42 @@
             @endif
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.check-status-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const button = this;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                    try {
+                        const res = await fetch(`http://127.0.0.1:8001/api/license-check`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute(
+                                    'content'),
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok) {
+                            alert('✅ ' + data.message);
+                            window.location.reload();
+                        } else {
+                            alert('❌ ' + data.message);
+                        }
+                    } catch (e) {
+                        alert('🚨 Failed to check status: ' + e.message);
+                    } finally {
+                        button.innerHTML = '<i class="fas fa-sync-alt"></i>';
+                    }
+                });
+            });
+        });
+    </script>
+
 @endsection

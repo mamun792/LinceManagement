@@ -22,15 +22,17 @@ class LicenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'license_key'      => 'string|unique:licenses,license_key,' . $this->route('license'),
-            'status'           => 'required|in:active,suspended,expired',
-            'created_time'     => 'required|date',
-            'expires_at'       => 'nullable|date|after_or_equal:created_time',
-            'lifetime'         => 'nullable|in:on',
-            'domain'           => 'required|url',
-            'max_domains'      => 'required|integer|min:1',
-            'ip_restrictions'  => 'nullable|string',
-            'notes'            => 'nullable|string',
+            'license_key'         => 'nullable|string|unique:licenses',
+            'status'              => 'required|in:active,suspended,expired',
+            'created_time'        => 'required|date',
+            'expires_at'          => 'nullable|date|after_or_equal:created_time',
+            'is_lifetime'         => 'nullable|boolean', // Use boolean instead of 'in:on'
+            'domain'              => 'required|url',
+            'max_domains'         => 'required|integer|min:1',
+            'ip_restrictions'     => 'nullable|string',
+            'meta_data'           => 'nullable|string',
+            'last_verified_at'    => 'nullable|date',
+            'verification_count'  => 'nullable|integer|min:0',
         ];
     }
 }

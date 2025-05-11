@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\LicensesController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('licenses.index');
-});
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('licenses', [LicensesController::class, 'index'])->name('licenses.index');
@@ -16,39 +20,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('licenses/{license}', [LicensesController::class, 'update'])->name('licenses.update');
     Route::delete('licenses/{license}', [LicensesController::class, 'destroy'])->name('licenses.destroy');
 
-    // projects.index
-    Route::get('projects', function () {
-        return view('admin.projects.index');
-    })->name('projects.index');
-
-    // projects.create
-    Route::get('projects/create', function () {
-        return view('admin.projects.create');
-    })->name('projects.create');
-
-    // projects.show
-    Route::get('projects/{project}', function ($project) {
-        return view('admin.projects.show', compact('project'));
-    })->name('projects.show');
-
-    // projects.edit
-    Route::get('projects/{project}/edit', function ($project) {
-        return view('admin.projects.edit', compact('project'));
-    })->name('projects.edit');
-    // projects.update
-    Route::put('projects/{project}', function ($project) {
-        // Logic to update the project
-        return redirect()->route('admin.projects.index');
-    })->name('projects.update');
-
-    // projects.destroy
-    Route::delete('projects/{project}', function ($project) {
-        // Logic to delete the project
-        return redirect()->route('admin.projects.index');
-    })->name('projects.destroy');
-    // projects.store
-    Route::post('projects', function () {
-        // Logic to store the project
-        return redirect()->route('admin.projects.index');
-    })->name('projects.store');
+    // deactive license
+    Route::post('licenses/{license}/deactivate', [LicensesController::class, 'deactivate'])->name('licenses.deactivate');
+    // activate license
+    Route::post('licenses/{license}/activate', [LicensesController::class, 'activate'])->name('licenses.activate');
+    // validate license
+    Route::post('licenses/{license}/validate', [LicensesController::class, 'validate'])->name('licenses.validate');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';
