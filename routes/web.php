@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\LicensesController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('licenses.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::prefix('admin')->name('admin.')->group(function () {

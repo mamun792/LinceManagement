@@ -27,10 +27,11 @@
                 <img src="https://via.placeholder.com/40" class="rounded-circle" width="40" height="40">
             </button>
             <div class="dropdown-menu drop-shadow-2xl dropdown-menu-start">
-                <a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a>
+                <a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i> Profile</a>
                 <a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>
+                    Logout</a>
             </div>
         </div>
     </div>
